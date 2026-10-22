@@ -13,6 +13,7 @@ import {
 import { motion } from "motion/react";
 import { mobileAssets } from "./assets";
 import { useMobileDevice } from "./Device";
+import { usePresentation } from './Presentation';
 
 type KeyboardContextValue = {
   visible: boolean;
@@ -36,11 +37,12 @@ const KeyboardContext = createContext<KeyboardContextValue | null>(null);
 
 export function KeyboardProvider({ children }: PropsWithChildren) {
   const { device } = useMobileDevice();
+  const { isApp } = usePresentation();
   const [visible, setVisible] = useState(false);
   const [dragOffset, setRawDragOffset] = useState(0);
   const [isDragging, setDragging] = useState(false);
   const [focusedElement, setFocusedElement] = useState<HTMLElement | null>(null);
-  const fullHeight = device.geometry.keyboard.height;
+  const fullHeight = isApp ? 0 : device.geometry.keyboard.height;
   const setDragOffset = (offset: number) => {
     setRawDragOffset(Math.max(0, Math.min(fullHeight, offset)));
   };
@@ -88,18 +90,19 @@ export function useKeyboard() {
 export function useKeyboardInsets() {
   const keyboard = useKeyboard();
   const { device } = useMobileDevice();
+  const { isApp, viewportHeight } = usePresentation();
   const reservesAndroidNavigation = device.platform === "android" && !keyboard.visible;
 
   return {
     keyboardHeight: keyboard.height,
     keyboardFullHeight: keyboard.fullHeight,
     keyboardDragging: keyboard.isDragging,
-    bottomInset: reservesAndroidNavigation
+    bottomInset: isApp ? 0 : reservesAndroidNavigation
       ? 0
       : device.platform === "android"
         ? keyboard.height
         : Math.max(device.geometry.safeArea.bottom, keyboard.height),
-    availableHeight:
+    availableHeight: isApp ? viewportHeight :
       device.geometry.screen.height -
       keyboard.height -
       (reservesAndroidNavigation ? device.geometry.safeArea.bottom : 0),

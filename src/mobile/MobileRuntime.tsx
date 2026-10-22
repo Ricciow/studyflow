@@ -3,37 +3,47 @@ import { MobileDeviceProvider, useMobileDevice } from "./Device";
 import { KeyboardDock, KeyboardProvider, useKeyboard } from "./Keyboard";
 import { PhoneFrame } from "./PhoneFrame";
 import { HomeIndicator, StatusBar } from "./components";
+import { PresentationProvider, usePresentation } from './Presentation';
 
 export function MobileRuntime({ children }: PropsWithChildren) {
   return (
-    <MobileDeviceProvider>
+    <PresentationProvider><MobileDeviceProvider>
       <PhoneFrame>
         <KeyboardProvider>
-          <KeyboardPreview />
-          <StatusBar />
+          <PreviewChrome />
           <MobileAppViewport>{children}</MobileAppViewport>
-          <HomeIndicator />
-          <KeyboardDock />
+          <PreviewFooter />
         </KeyboardProvider>
       </PhoneFrame>
-    </MobileDeviceProvider>
+    </MobileDeviceProvider></PresentationProvider>
   );
 }
 
 function MobileAppViewport({ children }: PropsWithChildren) {
   const { device } = useMobileDevice();
   const keyboard = useKeyboard();
+  const { isApp } = usePresentation();
 
   return (
     <div
       className="mobile-app-viewport"
       data-keyboard-visible={keyboard.visible ? "true" : "false"}
       data-platform={device.platform}
+      data-presentation={isApp ? 'app' : 'preview'}
       data-testid="mobile-app-viewport"
     >
       {children}
     </div>
   );
+}
+
+function PreviewChrome() {
+  const { isApp } = usePresentation();
+  return isApp ? null : <><KeyboardPreview/><StatusBar/></>;
+}
+function PreviewFooter() {
+  const { isApp } = usePresentation();
+  return isApp ? null : <><HomeIndicator/><KeyboardDock/></>;
 }
 
 function KeyboardPreview() {

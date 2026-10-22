@@ -73,4 +73,32 @@ Não há achados P0/P1/P2 visuais pendentes dentro do escopo de primeira versão
 - [x] Build, integridade do runtime e testes de regras aprovados.
 - [x] Limites e execução documentados em `README.md`.
 
+## Atualização responsiva — 22/10/2026
+
+Solicitação: manter o modelo de celular no computador e exibir o aplicativo em tela inteira no celular. Essa solicitação autoriza a alteração do runtime, registrada em `AGENTS.md`.
+
+### Evidências
+
+- `docs/screenshots/responsive/desktop-1400.png`: viewport de 1400 × 1200, com tela simulada de 393 × 852, moldura, barra de status e seletor de aparelhos preservados.
+- `docs/screenshots/responsive/mobile-390.png`: viewport e aplicativo em 390 × 844, sem moldura, câmera, barra de status ou teclado simulados. Tela começa em x=0, y=0, com escala 1.
+- `docs/screenshots/responsive/landscape-844.png`: viewport e aplicativo em 844 × 390, mantendo navegação e rolagem na orientação horizontal.
+- `docs/screenshots/responsive/small-menu-320.png`: menu de criação em 320 × 568. A primeira comparação mostrou pouca altura e margens duplas; ajuste para altura mínima de 360 px limitada à área disponível e redução das margens internas. As duas opções ficaram visíveis na nova captura.
+- Capturas em densidade efetiva de 1 pixel por CSS px; a comparação usa os mesmos componentes e o mesmo estado local de demonstração. Diferenças de data/meta em relação às capturas de 21/10 são dados locais preservados.
+
+### Verificações
+
+- Sem largura horizontal excedente em 320 e 390 px; navegação termina na borda inferior do viewport.
+- Prévia de iPhone e Pixel medida em 393 × 852 e 427 × 952 no desktop.
+- Após selecionar Pixel no desktop e reduzir a tela, a área de aplicativo passou a 390 × 844, sem reservar espaço para uma barra Android simulada.
+- Focar campo no desktop ainda mostra o teclado simulado; a mesma tela no modo celular tem zero imagens de teclado e mantém o conteúdo digitado ao alternar o tamanho.
+- Campos no modo celular usam fonte de 16 px para evitar ampliação automática no iOS. Rolagem usa `pan-y pinch-zoom`, com gestos nativos em vez da simulação por ponteiro do desktop.
+- Formulários e menu de registro também foram inspecionados em uma área reduzida de 390 × 440, sem cortar a ação de salvar. O runtime acompanha `visualViewport` quando o espaço disponível muda.
+- Tipografia, cartões, cores por matéria, ícones e textos permanecem com a mesma identidade. Nenhum novo ativo gráfico foi necessário. A ausência de chrome no celular é intencional e solicitada.
+- Console da verificação isolada: sem erros ou avisos.
+- Build, integridade do runtime, cinco testes de regras e quatro testes de hospedagem aprovados. Hashes atualizados após verificar as alterações autorizadas; o novo contexto de apresentação também passa a fazer parte da integridade.
+
+Limite: os testes usaram tamanhos de navegador; a interação com o teclado físico do sistema e recortes de aparelhos reais ainda merece validação em um celular. As áreas seguras usam `env(safe-area-inset-*)`, e o teclado nativo é entregue ao navegador.
+
+Sem achados P0/P1/P2 pendentes nesta atualização.
+
 final result: passed

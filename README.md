@@ -28,7 +28,7 @@ node --test tests/model.test.mjs  # Verificações diretas das regras de datas
 - **Perfil:** edição do nome, e-mail, curso e meta, configuração de rotina e preferências de lembretes internos.
 - **Boas-vindas:** ilustração própria e fluxo demonstrativo de cadastro/acesso e configuração. Acesse em Perfil → Conhecer o StudyFlow.
 
-O aplicativo abre no painel para permitir explorar os fluxos imediatamente. A prévia preserva uma simulação de celular com seleção de iPhone/Pixel e teclado. Ela se ajusta ao espaço disponível do navegador; ainda não há um painel próprio para desktop.
+O aplicativo abre no painel para permitir explorar os fluxos imediatamente. No computador, a prévia mostra uma simulação de celular com seleção de iPhone/Pixel e teclado. No celular, ocupa toda a tela disponível, usa rolagem e teclado nativos e remove moldura, câmera e barras simuladas. A mudança é automática abaixo de 768 px de largura, ou em telas horizontais de até 1023 × 600 px. As áreas seguras e a altura visível do navegador são respeitadas; ainda não há um painel próprio para desktop.
 
 ## Dados e limites desta versão
 

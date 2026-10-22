@@ -5,6 +5,7 @@ import { AnimatePresence, motion } from "motion/react";
 import { useKeyboard, useKeyboardInsets } from "./Keyboard";
 import { useScreenPortal } from "./PhoneFrame";
 import { useMobileDevice } from "./Device";
+import { usePresentation } from './Presentation';
 
 type BottomSheetProps = PropsWithChildren<{
   open: boolean;
@@ -23,6 +24,7 @@ export function BottomSheet({
   children,
 }: BottomSheetProps) {
   const { device } = useMobileDevice();
+  const { isApp, viewportHeight } = usePresentation();
   const { screenRef } = useScreenPortal();
   const keyboard = useKeyboard();
   const { keyboardHeight } = useKeyboardInsets();
@@ -65,10 +67,10 @@ export function BottomSheet({
     },
   );
 
-  const sheetHeight = Math.round(device.geometry.screen.height * snap);
-  const effectiveHeight = Math.max(260, sheetHeight - Math.min(keyboardHeight, 180));
+  const sheetHeight = Math.round((isApp ? viewportHeight : device.geometry.screen.height) * snap);
+  const effectiveHeight = isApp ? Math.min(viewportHeight - 16, Math.max(360, sheetHeight)) : Math.max(260, sheetHeight - Math.min(keyboardHeight, 180));
   const sheetBottom =
-    device.platform === "android"
+    !isApp && device.platform === "android"
       ? Math.max(device.geometry.safeArea.bottom, keyboardHeight)
       : keyboardHeight;
   const portalContainer = screenRef.current ?? undefined;

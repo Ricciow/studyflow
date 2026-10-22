@@ -64,6 +64,46 @@ button {
   padding: 24px;
 }
 
+/* On an actual phone the app is the viewport, not a phone inside a phone. */
+.phone-stage[data-presentation="app"] {
+  display: block;
+  padding: 0;
+  overflow: clip;
+  background: #f8f9fb;
+}
+.phone-stage[data-presentation="app"] .device-screen {
+  box-shadow: none;
+  overflow: clip;
+}
+.phone-stage[data-presentation="app"] .mobile-app-viewport[data-presentation="app"] {
+  bottom: 0;
+}
+.phone-stage[data-presentation="app"] .mobile-scroll {
+  touch-action: pan-y pinch-zoom;
+  user-select: auto;
+  transition: none;
+}
+.phone-stage[data-presentation="app"] .mobile-scroll-content {
+  min-height: 100%;
+}
+.phone-stage[data-presentation="app"] .device-screen,
+.phone-stage[data-presentation="app"] .device-screen * {
+  cursor: revert !important;
+}
+.phone-stage[data-presentation="app"] .device-screen :focus-visible {
+  outline: 3px solid #2d74b7 !important;
+  outline-offset: 2px;
+}
+.phone-stage[data-presentation="app"] .bottom-sheet {
+  min-height: 0;
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+  touch-action: pan-y;
+}
+.phone-stage[data-presentation="app"] .sheet-content {
+  touch-action: pan-y;
+  overscroll-behavior: contain;
+}
+
 .device-menu-bar {
   position: absolute;
   z-index: 100;

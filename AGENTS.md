@@ -1,5 +1,12 @@
 # Mobile Prototype Agent Guide
 
+## StudyFlow responsive runtime (user request, 22/10/2026)
+
+- Desktop retains the simulated phone, device picker and keyboard.
+- Phone-sized portrait/landscape viewports use the entire viewport, native scrolling and the real device keyboard, without simulated device chrome.
+- The user explicitly authorized these runtime changes. Preserve both presentations when making further changes. Presentation.tsx owns breakpoint and visual viewport state.
+- Update only affected runtime integrity hashes after verifying authorized changes; retain checks for the rest of the runtime.
+
 ## Prototype Instructions
 
 In ChatGPT Work Mode, run `sites-preview start "$PWD"`, open `http://terminal.local:4173/` in the cloud browser, and verify the rendered app and its primary interactions. Keep that preview open and tell the user to inspect it in the cloud browser; do not present the local URL as a user-facing chat link. In Codex Desktop, run the local server yourself, open the preview in the in-app browser, and provide the clickable local URL. Do not deploy to Sites unless the user explicitly asks to share, publish, or deploy. Do not give the user server-start instructions when you can run it.

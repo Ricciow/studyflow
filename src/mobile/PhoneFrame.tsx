@@ -12,6 +12,7 @@ import {
 } from "react";
 import { DevicePicker, useMobileDevice } from "./Device";
 import { useMobileCursor } from "./MobileCursor";
+import { usePresentation } from './Presentation';
 
 type ScreenPortalContextValue = {
   screenRef: RefObject<HTMLDivElement | null>;
@@ -68,16 +69,17 @@ export function PhoneFrame({ children }: PropsWithChildren) {
   const screenRef = useRef<HTMLDivElement | null>(null);
   const contextValue = useMemo(() => ({ screenRef }), []);
   const mobileCursor = useMobileCursor();
+  const { isApp, viewportHeight } = usePresentation();
 
   return (
     <ScreenPortalContext.Provider value={contextValue}>
-      <div className="phone-stage">
-        <DevicePicker />
+      <div className="phone-stage" data-presentation={isApp ? 'app' : 'preview'} style={isApp ? {height: viewportHeight} : undefined}>
+        {!isApp && <DevicePicker />}
         <div
           className="phone-scale-box"
           style={{
-            width: geometry.device.width * scale,
-            height: geometry.device.height * scale,
+            width: isApp ? '100%' : geometry.device.width * scale,
+            height: isApp ? '100%' : geometry.device.height * scale,
           }}
         >
           <div
@@ -87,19 +89,19 @@ export function PhoneFrame({ children }: PropsWithChildren) {
             data-testid="phone-frame"
             onDragStartCapture={suppressNativeDrag}
             style={{
-              width: geometry.device.width,
-              height: geometry.device.height,
-              transform: `scale(${scale})`,
+              width: isApp ? '100%' : geometry.device.width,
+              height: isApp ? '100%' : geometry.device.height,
+              transform: isApp ? 'none' : `scale(${scale})`,
             }}
           >
-            <img
+            {!isApp && <img
               className="phone-bezel"
               src={device.bezel}
               alt=""
               aria-hidden="true"
               draggable={false}
               style={{ zIndex: device.bezelLayer === "above-screen" ? 2 : 1 }}
-            />
+            />}
             <div
               ref={screenRef}
               className="device-screen"
@@ -107,21 +109,22 @@ export function PhoneFrame({ children }: PropsWithChildren) {
               data-device={device.id}
               data-phone-screen
               data-testid="device-screen"
-              {...mobileCursor.cursorHandlers}
+              {...(isApp ? {} : mobileCursor.cursorHandlers)}
               style={
                 {
-                  "--device-safe-area-bottom": `${geometry.safeArea.bottom}px`,
-                  left: geometry.screen.x,
-                  top: geometry.screen.y,
-                  width: geometry.screen.width,
-                  height: geometry.screen.height,
-                  borderRadius: geometry.screen.radius,
+                  "--device-safe-area-top": isApp ? 'env(safe-area-inset-top, 0px)' : `${geometry.safeArea.top}px`,
+                  "--device-safe-area-bottom": isApp ? 'env(safe-area-inset-bottom, 0px)' : `${geometry.safeArea.bottom}px`,
+                  left: isApp ? 0 : geometry.screen.x,
+                  top: isApp ? 0 : geometry.screen.y,
+                  width: isApp ? '100%' : geometry.screen.width,
+                  height: isApp ? '100%' : geometry.screen.height,
+                  borderRadius: isApp ? 0 : geometry.screen.radius,
                   zIndex: device.bezelLayer === "above-screen" ? 1 : 2,
                 } as CSSProperties
               }
             >
               {children}
-              {device.camera ? (
+              {!isApp && device.camera ? (
                 <span
                   className="device-camera"
                   data-testid="device-camera"
@@ -134,7 +137,7 @@ export function PhoneFrame({ children }: PropsWithChildren) {
                   }}
                 />
               ) : null}
-              {mobileCursor.cursorElement}
+              {!isApp && mobileCursor.cursorElement}
             </div>
           </div>
         </div>

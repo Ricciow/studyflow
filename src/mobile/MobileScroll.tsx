@@ -7,6 +7,7 @@ import {
   type PropsWithChildren,
 } from "react";
 import { useKeyboardInsets } from "./Keyboard";
+import { usePresentation } from './Presentation';
 
 type MobileScrollProps = PropsWithChildren<{
   className?: string;
@@ -47,6 +48,7 @@ type DragSession = {
 };
 
 export function MobileScroll({ className, children }: MobileScrollProps) {
+  const { isApp } = usePresentation();
   const { isKeyboardVisible, keyboardHeight, keyboardDragging } = useKeyboardInsets();
   const scrollRef = useRef<HTMLDivElement | null>(null);
   const hideTimerRef = useRef<number | null>(null);
@@ -433,11 +435,11 @@ export function MobileScroll({ className, children }: MobileScrollProps) {
         data-testid="mobile-scroll"
         data-dragging={isDragging ? "true" : "false"}
         data-overscroll={overscrollY.toFixed(2)}
-        onPointerDown={handlePointerDown}
-        onPointerMove={handlePointerMove}
-        onPointerUp={endDrag}
-        onPointerCancel={endDrag}
-        onClickCapture={suppressClickAfterDrag}
+        onPointerDown={isApp ? undefined : handlePointerDown}
+        onPointerMove={isApp ? undefined : handlePointerMove}
+        onPointerUp={isApp ? undefined : endDrag}
+        onPointerCancel={isApp ? undefined : endDrag}
+        onClickCapture={isApp ? undefined : suppressClickAfterDrag}
       >
         <div
           className="mobile-scroll-content"
