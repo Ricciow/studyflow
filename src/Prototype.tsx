@@ -90,6 +90,7 @@ type Page =
   | "welcome"
   | "register"
   | "login"
+  | "recover"
   | "setup";
 type StudyLog = {
   id: string;
@@ -124,7 +125,10 @@ const titles: Partial<Record<Page, string>> = {
 };
 
 export default function Prototype() {
-  const [page, setPage] = useState<Page>("home");
+  const [mockSession, setMockSession, sessionFail] = useStored<
+    "home" | "setup" | null
+  >("mock-session", null);
+  const [page, setPage] = useState<Page>(mockSession ?? "welcome");
   const [subjects, setSubjects, subjectFail] = useStored(
     "subjects",
     initialSubjects,
@@ -231,7 +235,13 @@ export default function Prototype() {
       : ["task-detail", "task-form"].includes(page)
         ? "tasks"
         : page;
-  const onboarding = ["welcome", "register", "login", "setup"].includes(page);
+  const onboarding = [
+    "welcome",
+    "register",
+    "login",
+    "recover",
+    "setup",
+  ].includes(page);
   const root = navigation.some((n) => n.id === page);
   const back = () =>
     go(
@@ -1309,10 +1319,14 @@ export default function Prototype() {
           </div>
           <button
             className="text-button sign-out"
-            onClick={() => go("welcome")}
+            onClick={() => {
+              setMockSession(null);
+              setToast("");
+              go("welcome");
+            }}
           >
             <Icon icon={ExitIcon} size={17} />
-            Voltar às boas-vindas
+            Sair da demonstração
           </button>
           <div className="app-version">
             StudyFlow · versão 0.1.0
@@ -1379,21 +1393,30 @@ export default function Prototype() {
         <Welcome
           onStart={() => go("register")}
           onLogin={() => go("login")}
-          onDemo={() => go("home")}
+          onDemo={() => {
+            setMockSession("home");
+            go("home");
+          }}
         />
       );
       break;
     case "register":
     case "login":
+    case "recover":
       content = (
         <Auth
-          login={page === "login"}
+          key={page}
+          mode={page}
           profile={profile}
-          onBack={() => go("welcome")}
+          onBack={() => go(page === "recover" ? "login" : "welcome")}
           onSwitch={() => go(page === "login" ? "register" : "login")}
+          onRecover={() => go("recover")}
           onSubmit={(p) => {
             setProfile(p);
+            setMockSession(page === "register" ? "setup" : "home");
             go(page === "register" ? "setup" : "home");
+            if (page === "login")
+              notify("Pronto! Você entrou na demonstração.");
           }}
         />
       );
@@ -1404,6 +1427,7 @@ export default function Prototype() {
           profile={profile}
           onSave={(p) => {
             setProfile(p);
+            setMockSession("home");
             go("home");
             notify("Tudo pronto. Seu semestre começa aqui!");
           }}
@@ -1434,7 +1458,7 @@ export default function Prototype() {
         </button>
       </header>
     );
-  else if (!["welcome", "register", "login"].includes(page))
+  else if (!["welcome", "register", "login", "recover"].includes(page))
     header = (
       <PageTitle
         title={
@@ -1446,7 +1470,13 @@ export default function Prototype() {
                 ? "Editar matéria"
                 : titles[page]) ?? ""
         }
-        back={root ? undefined : page === "setup" ? () => go("profile") : back}
+        back={
+          root
+            ? undefined
+            : page === "setup"
+              ? () => go(mockSession === "setup" ? "register" : "profile")
+              : back
+        }
         action={
           page === "tasks" || page === "exams" ? (
             <IconButton
@@ -1501,7 +1531,12 @@ export default function Prototype() {
           ))}
         </nav>
       )}
-      {(subjectFail || taskFail || eventFail || profileFail || logFail) && (
+      {(subjectFail ||
+        taskFail ||
+        eventFail ||
+        profileFail ||
+        logFail ||
+        sessionFail) && (
         <div className="storage-error" role="alert">
           Não foi possível salvar neste navegador.
         </div>

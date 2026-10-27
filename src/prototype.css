@@ -9,7 +9,9 @@
   padding-right: env(safe-area-inset-right, 0px);
 }
 .phone-stage[data-presentation="app"] .studyflow .bottom-nav {
-  padding: 8px max(10px, env(safe-area-inset-right, 0px)) calc(8px + env(safe-area-inset-bottom, 0px)) max(10px, env(safe-area-inset-left, 0px));
+  padding: 8px max(10px, env(safe-area-inset-right, 0px))
+    calc(8px + env(safe-area-inset-bottom, 0px))
+    max(10px, env(safe-area-inset-left, 0px));
 }
 .phone-stage[data-presentation="app"] input,
 .phone-stage[data-presentation="app"] textarea,
@@ -32,9 +34,17 @@
   padding-top: 5px;
 }
 @media (max-width: 359px) {
-  .phone-stage[data-presentation="app"] .stat-label { font-size: 10px; }
-  .phone-stage[data-presentation="app"] .quick-actions > button { gap: 6px; padding: 12px 8px; }
-  .phone-stage[data-presentation="app"] .quick-actions .round-icon { width: 30px; height: 30px; }
+  .phone-stage[data-presentation="app"] .stat-label {
+    font-size: 10px;
+  }
+  .phone-stage[data-presentation="app"] .quick-actions > button {
+    gap: 6px;
+    padding: 12px 8px;
+  }
+  .phone-stage[data-presentation="app"] .quick-actions .round-icon {
+    width: 30px;
+    height: 30px;
+  }
 }
 .studyflow {
   --red: #ce1732;
@@ -1579,6 +1589,63 @@
 }
 .auth-screen > .page-intro {
   text-align: center;
+}
+.password-control {
+  position: relative;
+}
+.password-control input {
+  width: 100%;
+  padding-right: 52px;
+}
+.password-control button {
+  position: absolute;
+  right: 3px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 44px;
+  height: 44px;
+  display: grid;
+  place-items: center;
+  color: var(--muted);
+}
+.auth-screen .field > label {
+  font-size: 12px;
+  font-weight: 600;
+}
+.auth-screen .forgot-password {
+  justify-self: end;
+  min-height: 44px;
+  margin-top: -8px;
+}
+.studyflow .auth-error {
+  padding: 10px 12px;
+  border-radius: 10px;
+  color: #a10f26;
+  background: #fff0f2;
+  font-size: 12px;
+}
+.auth-success {
+  text-align: center;
+}
+.auth-success-icon {
+  display: grid;
+  place-items: center;
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  margin: 34px auto 24px;
+  color: var(--red);
+  background: #fff0f2;
+}
+.auth-success .info-note {
+  text-align: left;
+}
+.auth-success .page-intro strong {
+  overflow-wrap: anywhere;
+}
+.auth-resend {
+  min-height: 44px;
+  margin-top: 10px;
 }
 .auth-switch {
   font-size: 11px;

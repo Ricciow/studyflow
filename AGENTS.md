@@ -1,5 +1,12 @@
 # Mobile Prototype Agent Guide
 
+## StudyFlow mock login (user request, 27/10/2026)
+
+- Login and registration are demonstration flows only; the user explicitly does not need real authentication.
+- Start at welcome unless a previous demo entry is remembered. Preserve the direct demo shortcut and existing study data on sign-out.
+- Passwords must stay transient in the form; never persist or transmit them. Recovery must clearly state that no email was sent.
+- Keep the GitHub repository `Ricciow/studyflow` private.
+
 ## StudyFlow responsive runtime (user request, 22/10/2026)
 
 - Desktop retains the simulated phone, device picker and keyboard.
