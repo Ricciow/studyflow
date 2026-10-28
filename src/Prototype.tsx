@@ -395,13 +395,22 @@ export default function Prototype() {
             className={`agenda-stop color-${event.type === "Estudo" ? "purple" : (eventSubject?.color ?? "red")}`}
             key={event.id}
           >
-            <time className="agenda-time" dateTime={`${date}T${event.start}`}>
-              {event.start}
-            </time>
+            <span className="agenda-times">
+              <time className="agenda-time" dateTime={`${date}T${event.start}`}>
+                {event.start}
+              </time>
+              <time
+                className="agenda-time agenda-time-end"
+                dateTime={`${date}T${event.end}`}
+              >
+                {event.end}
+              </time>
+            </span>
             <span className="agenda-rail" aria-hidden="true">
               <span className="agenda-pin">
                 <Icon icon={eventIcon} size={15} />
               </span>
+              <span className="agenda-end-pin" />
             </span>
             <button
               className="agenda-entry"
@@ -414,9 +423,8 @@ export default function Prototype() {
                   {duration < 60 ? `${duration} min` : studyTime(duration)}
                 </span>
               </span>
-              <strong className="agenda-event-title">{event.title}</strong>
-              <span className="agenda-until">
-                Até <time dateTime={`${date}T${event.end}`}>{event.end}</time>
+              <span className="agenda-title-row">
+                <strong className="agenda-event-title">{event.title}</strong>
                 <Icon icon={ChevronRightIcon} size={14} />
               </span>
               {event.location && (

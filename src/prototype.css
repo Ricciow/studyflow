@@ -721,6 +721,18 @@
   font-variant-numeric: tabular-nums;
   letter-spacing: -0.3px;
 }
+.agenda-times {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding-bottom: 22px;
+}
+.agenda-time-end {
+  padding-top: 0;
+  color: var(--muted);
+  font-size: 11px;
+  font-weight: 400;
+}
 .agenda-rail {
   display: flex;
   justify-content: center;
@@ -737,8 +749,28 @@
 .agenda-stop:first-child .agenda-rail::before {
   top: 16px;
 }
+.agenda-rail::after {
+  content: "";
+  position: absolute;
+  top: 16px;
+  bottom: 31px;
+  width: 2px;
+  background: var(--subject);
+  opacity: 0.45;
+}
+.agenda-end-pin {
+  position: absolute;
+  z-index: 1;
+  bottom: 27px;
+  width: 8px;
+  height: 8px;
+  border: 1.5px solid var(--subject);
+  border-radius: 50%;
+  background: var(--canvas);
+}
 .agenda-pin {
   position: relative;
+  z-index: 1;
   width: 30px;
   height: 30px;
   margin-top: 1px;
@@ -752,6 +784,7 @@
 }
 .studyflow .agenda-entry {
   min-width: 0;
+  min-height: 90px;
   margin: 0 0 23px 13px;
   padding: 4px 0 19px;
   text-align: left;
@@ -785,17 +818,15 @@
   letter-spacing: -0.4px;
   overflow-wrap: anywhere;
 }
-.agenda-until {
+.agenda-title-row {
   display: flex;
   align-items: center;
-  gap: 4px;
-  margin-top: 6px;
-  color: var(--muted);
-  font-size: 11px;
-  font-variant-numeric: tabular-nums;
+  gap: 10px;
 }
-.agenda-until > svg {
+.agenda-title-row > svg {
   margin-left: auto;
+  flex-shrink: 0;
+  color: var(--muted);
 }
 .agenda-location {
   display: flex;
@@ -813,7 +844,7 @@
 .agenda-entry:hover .agenda-event-title {
   color: var(--red);
 }
-.agenda-entry:hover .agenda-until > svg {
+.agenda-entry:hover .agenda-title-row > svg {
   color: var(--red);
 }
 .agenda-finish {

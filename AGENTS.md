@@ -3,6 +3,7 @@
 ## Daily agenda design (latest user feedback, 27/10/2026)
 
 - Replace the tinted appointment cards with an open, decorated vertical timeline. Use a connected rail, subject-colored markers and clear time typography; keep the red StudyFlow identity and mobile readability. This supersedes the earlier preference for time ranges inside cards. Preserve event details, editing and date navigation.
+- Show both start and end times on the timeline itself, with a distinct end marker for each event; do not leave the end time in the event description.
 
 ## StudyFlow mock login (user request, 27/10/2026)
 
