@@ -9,7 +9,8 @@
 
 ## Task completion (user feedback, 27/10/2026)
 
-- Show all tasks by default, with filters for Todas, Pendentes, Concluídas and Atrasadas. Completing a task in Todas keeps it in place, visibly checked and labeled Concluída. Keep reopening available and offer an immediate undo action in the confirmation message.
+- Show all tasks by default, with filters for Todas, Pendentes, Concluídas and Atrasadas. Completing a task in Todas keeps it in place, visibly checked and labeled Concluída. Keep reopening available; do not show a completion/reopening toast or an undo snackbar (latest feedback, 27/10/2026).
+- On the home screen, tasks completed in “Para ficar de olho” stay visible as completed until the page reloads. Retain their IDs in React memory only; completion itself stays persisted, so they disappear from this pending-task preview after reload.
 
 ## StudyFlow mock login (user request, 27/10/2026)
 

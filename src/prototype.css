@@ -1892,13 +1892,6 @@
   flex: 1;
   min-width: 0;
 }
-.toast .toast-undo {
-  width: auto;
-  min-width: auto;
-  font-weight: 600;
-  text-decoration: underline;
-  text-underline-offset: 3px;
-}
 .storage-error {
   position: absolute;
   top: 54px;

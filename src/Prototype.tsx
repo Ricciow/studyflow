@@ -152,10 +152,9 @@ export default function Prototype() {
     read: false,
   });
   const [toast, setToast] = useState("");
-  const [taskUndo, setTaskUndo] = useState<{
-    id: string;
-    done: boolean;
-  } | null>(null);
+  const [homeCompletedTaskIds, setHomeCompletedTaskIds] = useState<string[]>(
+    [],
+  );
   const [selectedTaskId, setSelectedTaskId] = useState("t1");
   const [selectedEventId, setSelectedEventId] = useState("e1");
   const [selectedEventDate, setSelectedEventDate] = useState(today);
@@ -187,21 +186,22 @@ export default function Prototype() {
   }, [screenRef]);
   useEffect(() => {
     if (!toast) return;
-    const id = setTimeout(() => setToast(""), taskUndo ? 6500 : 3500);
+    const id = setTimeout(() => setToast(""), 3500);
     return () => clearTimeout(id);
-  }, [toast, taskUndo]);
+  }, [toast]);
   const go = (next: Page) => {
     keyboard.hide();
     setPage(next);
     setAddOpen(false);
     setLogOpen(false);
   };
-  const notify = (message: string) => {
-    setTaskUndo(null);
-    setToast(message);
-  };
+  const notify = (message: string) => setToast(message);
   const subject = (id: string) => subjects.find((s) => s.id === id);
   const pending = tasks.filter((t) => !t.done);
+  const homeTasks = tasks
+    .filter((task) => !task.done || homeCompletedTaskIds.includes(task.id))
+    .sort((a, b) => a.due.localeCompare(b.due))
+    .slice(0, 2);
   const week = weekDates(date);
   const visibleWeekEvents = events.filter((e) =>
     week.some((d) => occursOn(e, d)),
@@ -287,21 +287,13 @@ export default function Prototype() {
     go("task-form");
   };
   const toggleTask = (task: Task) => {
+    if (page === "home" && !task.done) {
+      setHomeCompletedTaskIds((ids) =>
+        ids.includes(task.id) ? ids : [...ids, task.id],
+      );
+    }
     setTasks((prev) =>
       prev.map((t) => (t.id === task.id ? { ...t, done: !t.done } : t)),
-    );
-    notify(task.done ? "Tarefa reaberta." : "Tarefa concluída.");
-    setTaskUndo({ id: task.id, done: task.done });
-  };
-  const undoTaskChange = () => {
-    if (!taskUndo) return;
-    setTasks((prev) =>
-      prev.map((task) =>
-        task.id === taskUndo.id ? { ...task, done: taskUndo.done } : task,
-      ),
-    );
-    notify(
-      taskUndo.done ? "Conclusão restaurada." : "Tarefa marcada como pendente.",
     );
   };
   const saveEvent = (event: Event) => {
@@ -587,11 +579,13 @@ export default function Prototype() {
             Para ficar de olho
           </SectionTitle>
           <div className="card compact">
-            {pending
-              .slice()
-              .sort((a, b) => a.due.localeCompare(b.due))
-              .slice(0, 2)
-              .map(taskRow)}
+            {homeTasks.length ? (
+              homeTasks.map(taskRow)
+            ) : (
+              <p className="no-classes">
+                Tudo em dia. Nenhuma tarefa pendente.
+              </p>
+            )}
           </div>
           <div className="encouragement">
             <Icon icon={RocketIcon} size={19} />
@@ -1647,11 +1641,6 @@ export default function Prototype() {
         <div className="toast" role="status">
           <Icon icon={CheckCircledIcon} size={19} />
           <span className="toast-text">{toast}</span>
-          {taskUndo && (
-            <button className="toast-undo" onClick={undoTaskChange}>
-              Desfazer
-            </button>
-          )}
           <button aria-label="Fechar mensagem" onClick={() => setToast("")}>
             <Icon icon={Cross2Icon} size={15} />
           </button>
