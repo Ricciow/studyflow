@@ -16,7 +16,12 @@
 - Login and registration are demonstration flows only; the user explicitly does not need real authentication.
 - Start at welcome unless a previous demo entry is remembered. Preserve the direct demo shortcut and existing study data on sign-out.
 - Passwords must stay transient in the form; never persist or transmit them. Recovery must clearly state that no email was sent.
-- Keep the GitHub repository `Ricciow/studyflow` private.
+- The user requested that `Ricciow/studyflow` become public and deploy automatically to GitHub Pages (27/10/2026), superseding the earlier private-repository preference.
+
+## GitHub Pages hosting (user request, 27/10/2026)
+
+- Deploy `main` using `.github/workflows/deploy-pages.yml`. `npm run build:pages` creates `dist/pages` with the Pages base path; the existing Sites build remains available.
+- The hosting change authorizes making asset URLs in `src/mobile/assets.ts` and `src/mobile/components.tsx` respect `import.meta.env.BASE_URL`. Preserve device appearance and behavior and update only these files' integrity hashes after verification.
 
 ## StudyFlow responsive runtime (user request, 22/10/2026)
 

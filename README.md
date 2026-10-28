@@ -55,6 +55,18 @@ src/
 
 O shell da prévia vem do template Product Design. Para evoluir o aplicativo, concentre alterações nos arquivos específicos acima. `src/App.tsx`, `src/styles.css` e `src/mobile/` pertencem à infraestrutura protegida da prévia. A saída de produção fica em `dist/client`; o template também prepara um Worker para hospedagem no Sites.
 
-Demo: [StudyFlow no Sites](https://studyflow-estudantes-demo.peachyrobin66.chatgpt.site/). Código: [Ricciow/studyflow](https://github.com/Ricciow/studyflow), repositório privado.
+Demo pública: [StudyFlow no GitHub Pages](https://ricciow.github.io/studyflow/). Também disponível no [Sites](https://studyflow-estudantes-demo.peachyrobin66.chatgpt.site/). Código: [Ricciow/studyflow](https://github.com/Ricciow/studyflow), repositório público.
+
+## Deploy automático no GitHub Pages
+
+O workflow [deploy-pages.yml](.github/workflows/deploy-pages.yml) instala as dependências, verifica a integridade do runtime e as regras de datas/tarefas, compila e publica a cada push na `main`. Também pode ser executado manualmente em **Actions → Deploy StudyFlow to GitHub Pages → Run workflow**. O repositório usa **Settings → Pages → Source: GitHub Actions**; a publicação usa o token temporário do próprio Actions, sem segredo adicional.
+
+```sh
+npm run build:pages
+```
+
+O build estático fica em `dist/pages`, com `/studyflow/` como caminho padrão. O workflow recebe o caminho de `configure-pages`; para outro endereço, defina `PAGES_BASE_PATH` antes de compilar. Os arquivos do Pages são separados de `dist/client` e do Worker gerado por `npm run build` para Sites.
+
+Os dados continuam locais ao navegador e à origem. Dados salvos no endereço do Sites não aparecem automaticamente no GitHub Pages.
 
 O próximo passo de produto é definir autenticação e backend para substituir a persistência local, seguido por exclusão com recuperação, anexos e notificações reais.

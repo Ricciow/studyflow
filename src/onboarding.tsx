@@ -47,7 +47,7 @@ export function Welcome({
       </p>
       <img
         className="welcome-illustration"
-        src="/assets/study-illustration.png"
+        src={`${import.meta.env.BASE_URL}assets/study-illustration.png`}
         alt="Estudante de moletom vermelho usando um notebook entre livros, com uma universidade ao fundo"
       />
       <button className="button primary full" onClick={onStart}>
