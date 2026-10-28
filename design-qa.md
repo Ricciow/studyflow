@@ -102,3 +102,10 @@ Limite: os testes usaram tamanhos de navegador; a interação com o teclado fís
 Sem achados P0/P1/P2 pendentes nesta atualização.
 
 final result: passed
+
+# Ajuste da agenda diária — 27/10/2026
+
+- Removida a coluna lateral que repetia os horários de início e fim.
+- Cada cartão ocupa a largura disponível e apresenta uma vez o período (por exemplo, `08:00 às 09:50`), seguido do título e do local. Os números usam largura tabular.
+- Mantidas as cores por matéria, a ordem cronológica e a abertura dos detalhes ao tocar no cartão.
+- Verificações: build de produção, integridade dos 29 arquivos do runtime e quatro verificações de empacotamento passaram. A conferência visual desta alteração ficou pendente: o navegador integrado não concluiu a navegação da prévia local, embora o servidor tenha respondido HTTP 200.

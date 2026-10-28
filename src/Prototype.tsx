@@ -350,10 +350,21 @@ export default function Prototype() {
     >
       <span className="event-dot" />
       <span className="event-info">
+        {page === "agenda" && view === "Dia" && (
+          <span className="event-period">
+            <time dateTime={`${date}T${event.start}`}>{event.start}</time>
+            <span className="period-until">às</span>
+            <time dateTime={`${date}T${event.end}`}>{event.end}</time>
+          </span>
+        )}
         <strong>{event.title}</strong>
         <span>
-          {event.start}–{event.end}
-          <span className="separator">·</span>
+          {!(page === "agenda" && view === "Dia") && (
+            <>
+              {event.start}–{event.end}
+              <span className="separator">·</span>
+            </>
+          )}
           {event.location || event.type}
         </span>
       </span>
@@ -547,17 +558,7 @@ export default function Prototype() {
           {view === "Dia" ? (
             <>
               <SectionTitle>{dayEvents.length} compromissos</SectionTitle>
-              <div className="timeline">
-                {dayEvents.map((e) => (
-                  <div className="timeline-row" key={e.id}>
-                    <span className="timeline-time">
-                      {e.start}
-                      <small>{e.end}</small>
-                    </span>
-                    {eventRow(e)}
-                  </div>
-                ))}
-              </div>
+              <div className="timeline">{dayEvents.map(eventRow)}</div>
               {!dayEvents.length && (
                 <Empty
                   title="Seu dia está livre"

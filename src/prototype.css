@@ -687,37 +687,43 @@
 }
 .timeline {
   margin-bottom: 22px;
-}
-.timeline-row {
-  display: flex;
-  align-items: flex-start;
-  gap: 9px;
-  margin: 0 0 12px;
-}
-.timeline-time {
-  width: 42px;
-  font-size: 11px;
-  padding-top: 13px;
-  font-weight: 600;
-  color: #5e6b7b;
-}
-.timeline-time small {
-  display: block;
-  font-size: 10px;
-  font-weight: 400;
-  color: #94a0ac;
+  display: grid;
+  gap: 12px;
 }
 .timeline .event-row {
   background: var(--subject-soft);
+  border: 0;
   border-left: 3px solid var(--subject);
-  border-radius: 9px;
-  padding: 13px 10px;
-  min-height: 72px;
-  flex: 1;
+  border-radius: 10px;
+  padding: 14px 15px;
+  min-height: 100px;
   min-width: 0;
 }
+.timeline .event-info > .event-period {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  margin: 0 0 7px;
+  color: var(--ink);
+  font-size: 14px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  line-height: 1.2;
+}
+.event-period .period-until {
+  color: var(--muted);
+  font-size: 11px;
+  font-weight: 400;
+}
 .timeline .event-info strong {
-  color: var(--subject);
+  color: var(--ink);
+  font-size: 14px;
+}
+.timeline .event-info > span:last-child {
+  color: var(--muted);
+}
+.timeline .event-row:hover {
+  box-shadow: inset 0 0 0 1px var(--subject);
 }
 .timeline .event-dot {
   display: none;

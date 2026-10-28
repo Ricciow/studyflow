@@ -1,5 +1,9 @@
 # Mobile Prototype Agent Guide
 
+## Daily agenda design (user feedback, 27/10/2026)
+
+- Avoid the detached left column stacking start/end times beside event cards. Show the time range once, inside the card, with clear hierarchy and tabular numerals; keep the title and location on separate lines.
+
 ## StudyFlow mock login (user request, 27/10/2026)
 
 - Login and registration are demonstration flows only; the user explicitly does not need real authentication.
