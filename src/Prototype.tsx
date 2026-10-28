@@ -607,7 +607,9 @@ export default function Prototype() {
               onClick={() => setDate(addDays(date, view === "Dia" ? 1 : 7))}
             />
           </div>
-          <div className="week-strip">
+          <div
+            className={`week-strip ${view === "Semana" ? "week-strip-calendar" : ""}`}
+          >
             {week.map((d) => (
               <button
                 key={d}

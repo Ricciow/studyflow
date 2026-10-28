@@ -53,6 +53,7 @@
   --muted: #626f7d;
   --line: #e9edf0;
   --canvas: #f8f9fb;
+  --week-time-gutter: 31px;
   position: absolute;
   inset: 0;
   color: var(--ink);
@@ -646,9 +647,13 @@
 }
 .week-strip {
   display: grid;
-  grid-template-columns: repeat(7, 1fr);
+  grid-template-columns: repeat(7, minmax(0, 1fr));
   margin: 0 0 18px;
   gap: 3px;
+}
+.week-strip-calendar {
+  margin-left: var(--week-time-gutter);
+  gap: 0;
 }
 .week-strip button {
   display: flex;
@@ -665,6 +670,7 @@
 }
 .week-strip strong {
   font-size: 14px;
+  font-variant-numeric: tabular-nums;
 }
 .week-strip .selected {
   background: var(--red);
@@ -880,7 +886,7 @@
 }
 .week-hours {
   position: relative;
-  flex: 0 0 31px;
+  flex: 0 0 var(--week-time-gutter);
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -903,7 +909,7 @@
 .week-columns {
   flex: 1;
   display: grid;
-  grid-template-columns: repeat(7, 1fr);
+  grid-template-columns: repeat(7, minmax(0, 1fr));
   min-width: 0;
   border-top: 1px solid #e9edf2;
 }
