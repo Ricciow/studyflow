@@ -685,48 +685,161 @@
 .selected .day-marker.has-event {
   background: white;
 }
-.timeline {
-  margin-bottom: 22px;
-  display: grid;
-  gap: 12px;
-}
-.timeline .event-row {
-  background: var(--subject-soft);
-  border: 0;
-  border-left: 3px solid var(--subject);
-  border-radius: 10px;
-  padding: 14px 15px;
-  min-height: 100px;
-  min-width: 0;
-}
-.timeline .event-info > .event-period {
+.agenda-day-heading {
   display: flex;
+  flex-wrap: wrap;
   align-items: baseline;
-  gap: 6px;
-  margin: 0 0 7px;
-  color: var(--ink);
-  font-size: 14px;
-  font-weight: 600;
-  font-variant-numeric: tabular-nums;
-  line-height: 1.2;
+  justify-content: space-between;
+  gap: 4px 12px;
+  padding: 9px 0 21px;
+  border-top: 1px solid var(--line);
 }
-.event-period .period-until {
+.agenda-day-heading h2 {
+  font-size: 14px;
+}
+.agenda-day-heading > span {
   color: var(--muted);
   font-size: 11px;
-  font-weight: 400;
 }
-.timeline .event-info strong {
-  color: var(--ink);
-  font-size: 14px;
+.agenda-timeline {
+  --time-column: 47px;
+  --rail-column: 32px;
+  list-style: none;
+  padding: 0;
+  margin: 0 0 25px;
 }
-.timeline .event-info > span:last-child {
+.agenda-stop {
+  display: grid;
+  grid-template-columns: var(--time-column) var(--rail-column) minmax(0, 1fr);
+  position: relative;
+}
+.agenda-time {
+  padding-top: 7px;
+  font-size: 12px;
+  line-height: 18px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.3px;
+}
+.agenda-rail {
+  display: flex;
+  justify-content: center;
+  position: relative;
+}
+.agenda-rail::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 1px;
+  background: #dce1e7;
+}
+.agenda-stop:first-child .agenda-rail::before {
+  top: 16px;
+}
+.agenda-pin {
+  position: relative;
+  width: 30px;
+  height: 30px;
+  margin-top: 1px;
+  display: grid;
+  place-items: center;
+  background: var(--subject-soft);
+  color: color-mix(in srgb, var(--subject) 75%, #202a39);
+  border: 1px solid color-mix(in srgb, var(--subject) 30%, transparent);
+  border-radius: 50%;
+  box-shadow: 0 0 0 4px var(--canvas);
+}
+.studyflow .agenda-entry {
+  min-width: 0;
+  margin: 0 0 23px 13px;
+  padding: 4px 0 19px;
+  text-align: left;
+  border-bottom: 1px solid var(--line);
+  border-radius: 0;
+}
+.agenda-entry-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 4px 10px;
+  margin-bottom: 7px;
+}
+.agenda-kind {
+  color: color-mix(in srgb, var(--subject) 70%, #202a39);
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: 1.1px;
+  text-transform: uppercase;
+}
+.agenda-duration {
   color: var(--muted);
+  font-size: 10px;
+  font-variant-numeric: tabular-nums;
 }
-.timeline .event-row:hover {
-  box-shadow: inset 0 0 0 1px var(--subject);
+.agenda-event-title {
+  display: block;
+  font-size: 17px;
+  line-height: 1.35;
+  letter-spacing: -0.4px;
+  overflow-wrap: anywhere;
 }
-.timeline .event-dot {
-  display: none;
+.agenda-until {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-top: 6px;
+  color: var(--muted);
+  font-size: 11px;
+  font-variant-numeric: tabular-nums;
+}
+.agenda-until > svg {
+  margin-left: auto;
+}
+.agenda-location {
+  display: flex;
+  align-items: flex-start;
+  gap: 4px;
+  margin-top: 7px;
+  color: var(--muted);
+  font-size: 11px;
+  overflow-wrap: anywhere;
+}
+.agenda-location > svg {
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+.agenda-entry:hover .agenda-event-title {
+  color: var(--red);
+}
+.agenda-entry:hover .agenda-until > svg {
+  color: var(--red);
+}
+.agenda-finish {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  padding: 0 0 0 calc(var(--time-column) + 12px);
+  color: var(--muted);
+  font-size: 10px;
+}
+.agenda-finish::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: calc(var(--time-column) + 15.5px);
+  height: 5px;
+  width: 1px;
+  background: #dce1e7;
+}
+.agenda-finish-dot {
+  width: 8px;
+  height: 8px;
+  border: 1px solid #a6afba;
+  border-radius: 50%;
+  flex-shrink: 0;
 }
 .weekly-agenda {
   position: relative;

@@ -21,6 +21,7 @@ import {
   CheckCircledIcon,
   Cross2Icon,
   RocketIcon,
+  SewingPinIcon,
 } from "@radix-ui/react-icons";
 import {
   BottomSheet,
@@ -371,6 +372,69 @@ export default function Prototype() {
       <Icon icon={ChevronRightIcon} size={16} />
     </button>
   );
+  const dailyTimeline = () => (
+    <ol
+      className="agenda-timeline"
+      aria-label="Linha do tempo dos compromissos"
+    >
+      {dayEvents.map((event) => {
+        const eventSubject = subject(event.subjectId);
+        const duration =
+          Number(event.end.slice(0, 2)) * 60 +
+          Number(event.end.slice(3)) -
+          Number(event.start.slice(0, 2)) * 60 -
+          Number(event.start.slice(3));
+        const eventIcon =
+          event.type === "Aula"
+            ? ReaderIcon
+            : event.type === "Estudo"
+              ? Pencil1Icon
+              : PersonIcon;
+        return (
+          <li
+            className={`agenda-stop color-${event.type === "Estudo" ? "purple" : (eventSubject?.color ?? "red")}`}
+            key={event.id}
+          >
+            <time className="agenda-time" dateTime={`${date}T${event.start}`}>
+              {event.start}
+            </time>
+            <span className="agenda-rail" aria-hidden="true">
+              <span className="agenda-pin">
+                <Icon icon={eventIcon} size={15} />
+              </span>
+            </span>
+            <button
+              className="agenda-entry"
+              aria-label={`${event.title}, ${event.start} às ${event.end}${event.location ? `, ${event.location}` : ""}`}
+              onClick={() => openEvent(event, date)}
+            >
+              <span className="agenda-entry-top">
+                <span className="agenda-kind">{event.type}</span>
+                <span className="agenda-duration">
+                  {duration < 60 ? `${duration} min` : studyTime(duration)}
+                </span>
+              </span>
+              <strong className="agenda-event-title">{event.title}</strong>
+              <span className="agenda-until">
+                Até <time dateTime={`${date}T${event.end}`}>{event.end}</time>
+                <Icon icon={ChevronRightIcon} size={14} />
+              </span>
+              {event.location && (
+                <span className="agenda-location">
+                  <Icon icon={SewingPinIcon} size={13} />
+                  {event.location}
+                </span>
+              )}
+            </button>
+          </li>
+        );
+      })}
+      <li className="agenda-finish" aria-hidden="true">
+        <span className="agenda-finish-dot" />
+        <span>Fim dos compromissos</span>
+      </li>
+    </ol>
+  );
   const quickLink = (
     icon: any,
     label: string,
@@ -557,8 +621,14 @@ export default function Prototype() {
           </div>
           {view === "Dia" ? (
             <>
-              <SectionTitle>{dayEvents.length} compromissos</SectionTitle>
-              <div className="timeline">{dayEvents.map(eventRow)}</div>
+              <div className="agenda-day-heading">
+                <h2>Linha do tempo</h2>
+                <span>
+                  {dayEvents.length}{" "}
+                  {dayEvents.length === 1 ? "compromisso" : "compromissos"}
+                </span>
+              </div>
+              {dayEvents.length > 0 && dailyTimeline()}
               {!dayEvents.length && (
                 <Empty
                   title="Seu dia está livre"
