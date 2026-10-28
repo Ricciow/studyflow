@@ -505,6 +505,10 @@
   display: flex;
   align-items: center;
   padding: 14px 12px 14px 4px;
+  transition: background-color 180ms ease;
+}
+.task-row.done {
+  background: #f3faf6;
 }
 .task-row + .task-row {
   border-top: 1px solid #f0f2f5;
@@ -527,8 +531,8 @@
   border-radius: 4px;
 }
 .done .task-check:before {
-  background: var(--red);
-  border-color: var(--red);
+  background: #28764b;
+  border-color: #28764b;
 }
 .task-check svg {
   position: relative;
@@ -553,7 +557,32 @@
   line-height: 1.6;
   margin-top: 3px;
 }
-.done .task-content strong,
+.done .task-content strong {
+  text-decoration: line-through;
+  text-decoration-color: #a1baaa;
+  color: #526a5d;
+}
+.done .task-check svg {
+  animation: task-check-in 180ms ease-out;
+}
+@keyframes task-check-in {
+  from {
+    transform: scale(0.5);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .task-row {
+    transition: none;
+  }
+  .done .task-check svg {
+    animation: none;
+  }
+}
 .struck {
   text-decoration: line-through;
   color: #88929c;
@@ -1852,13 +1881,23 @@
   color: #a9e1c7;
 }
 .toast button {
-  margin-left: auto;
   color: #fff;
   width: 28px;
   min-width: 28px;
   height: 28px;
   display: grid;
   place-items: center;
+}
+.toast-text {
+  flex: 1;
+  min-width: 0;
+}
+.toast .toast-undo {
+  width: auto;
+  min-width: auto;
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 3px;
 }
 .storage-error {
   position: absolute;

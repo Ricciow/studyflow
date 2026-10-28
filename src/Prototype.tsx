@@ -152,13 +152,17 @@ export default function Prototype() {
     read: false,
   });
   const [toast, setToast] = useState("");
+  const [taskUndo, setTaskUndo] = useState<{
+    id: string;
+    done: boolean;
+  } | null>(null);
   const [selectedTaskId, setSelectedTaskId] = useState("t1");
   const [selectedEventId, setSelectedEventId] = useState("e1");
   const [selectedEventDate, setSelectedEventDate] = useState(today);
   const [editingTask, setEditingTask] = useState<Task>();
   const [editingEvent, setEditingEvent] = useState<Event>();
   const [editingSubject, setEditingSubject] = useState<Subject>();
-  const [taskFilter, setTaskFilter] = useState("Pendentes");
+  const [taskFilter, setTaskFilter] = useState("Todas");
   const [examFilter, setExamFilter] = useState("Todos");
   const [sort, setSort] = useState("due");
   const [search, setSearch] = useState("");
@@ -183,16 +187,19 @@ export default function Prototype() {
   }, [screenRef]);
   useEffect(() => {
     if (!toast) return;
-    const id = setTimeout(() => setToast(""), 3500);
+    const id = setTimeout(() => setToast(""), taskUndo ? 6500 : 3500);
     return () => clearTimeout(id);
-  }, [toast]);
+  }, [toast, taskUndo]);
   const go = (next: Page) => {
     keyboard.hide();
     setPage(next);
     setAddOpen(false);
     setLogOpen(false);
   };
-  const notify = (message: string) => setToast(message);
+  const notify = (message: string) => {
+    setTaskUndo(null);
+    setToast(message);
+  };
   const subject = (id: string) => subjects.find((s) => s.id === id);
   const pending = tasks.filter((t) => !t.done);
   const week = weekDates(date);
@@ -283,8 +290,18 @@ export default function Prototype() {
     setTasks((prev) =>
       prev.map((t) => (t.id === task.id ? { ...t, done: !t.done } : t)),
     );
+    notify(task.done ? "Tarefa reaberta." : "Tarefa concluída.");
+    setTaskUndo({ id: task.id, done: task.done });
+  };
+  const undoTaskChange = () => {
+    if (!taskUndo) return;
+    setTasks((prev) =>
+      prev.map((task) =>
+        task.id === taskUndo.id ? { ...task, done: taskUndo.done } : task,
+      ),
+    );
     notify(
-      task.done ? "Tarefa reaberta." : "Mais uma conquista! Tarefa concluída.",
+      taskUndo.done ? "Conclusão restaurada." : "Tarefa marcada como pendente.",
     );
   };
   const saveEvent = (event: Event) => {
@@ -302,11 +319,13 @@ export default function Prototype() {
   const filteredTasks = tasks
     .filter(
       (t) =>
-        (taskFilter === "Concluídas"
-          ? t.done
-          : taskFilter === "Atrasadas"
-            ? isOverdue(t)
-            : !t.done) &&
+        (taskFilter === "Todas"
+          ? true
+          : taskFilter === "Concluídas"
+            ? t.done
+            : taskFilter === "Atrasadas"
+              ? isOverdue(t)
+              : !t.done) &&
         `${t.title} ${subject(t.subjectId)?.name}`
           .toLocaleLowerCase("pt-BR")
           .includes(search.toLocaleLowerCase("pt-BR")),
@@ -340,7 +359,11 @@ export default function Prototype() {
           </span>
         </span>
       </button>
-      <Badge priority={task.priority} />
+      {task.done ? (
+        <span className="badge low task-completed">Concluída</span>
+      ) : (
+        <Badge priority={task.priority} />
+      )}
     </div>
   );
   const eventRow = (event: Event) => (
@@ -640,11 +663,7 @@ export default function Prototype() {
               </div>
               {dayEvents.length > 0 && dailyTimeline()}
               {!dayEvents.length && (
-                <Empty
-                  title="Seu dia está livre"
-                  action="Adicionar compromisso"
-                  onClick={newEvent}
-                >
+                <Empty title="Seu dia está livre">
                   Reserve um horário para o que importa.
                 </Empty>
               )}
@@ -730,7 +749,7 @@ export default function Prototype() {
             Menos coisa na cabeça. Mais foco no que importa.
           </p>
           <Segments
-            values={["Pendentes", "Concluídas", "Atrasadas"]}
+            values={["Todas", "Pendentes", "Concluídas", "Atrasadas"]}
             selected={taskFilter}
             onChange={setTaskFilter}
           />
@@ -768,7 +787,9 @@ export default function Prototype() {
                     ? "Tudo em dia por aqui!"
                     : taskFilter === "Concluídas"
                       ? "Suas conquistas vêm aí"
-                      : "Tudo feito!"
+                      : taskFilter === "Todas"
+                        ? "Sua lista começa aqui"
+                        : "Tudo feito!"
               }
               action={search ? undefined : "Criar tarefa"}
               onClick={newTask}
@@ -1625,7 +1646,12 @@ export default function Prototype() {
       {toast && (
         <div className="toast" role="status">
           <Icon icon={CheckCircledIcon} size={19} />
-          {toast}
+          <span className="toast-text">{toast}</span>
+          {taskUndo && (
+            <button className="toast-undo" onClick={undoTaskChange}>
+              Desfazer
+            </button>
+          )}
           <button aria-label="Fechar mensagem" onClick={() => setToast("")}>
             <Icon icon={Cross2Icon} size={15} />
           </button>
